@@ -1,46 +1,88 @@
 <?php
-// class HP.php
-class HP {
-    private $conn;
+// kelas induk / parent untuk koneksi database
+class Database {
+    // property dengan visibility protected
+    protected $conn;
+
     // constructor
     function __construct($db) {
         $this->conn = $db;
     }
+}
 
-    // method OOP: menampilkan data hp
-    function tampil() {
+// kelas turunan hp / mewarisi class Database (inheritance)
+class HP extends Database {
+    //property dengan visibility private
+    private $id;
+    private $nama;
+    private $stok;
+
+    // setter
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setNama($nama) {
+        $this->nama = $nama;
+    }
+
+    public function setStok($stok) {
+        $this->stok = $stok;
+    }
+
+    // getter untuk mengambil id hp
+    public function getId() {
+        return $this->id;
+    }
+
+        // getter untuk mengambil nama hp
+    public function getNama() {
+        return $this->nama;
+    }
+
+        // getter untuk mengambil stok hp
+    public function getStok() {
+        return $this->stok;
+    }
+
+    // method untuk menampilkan stok hp
+    public function tampil() {
         return mysqli_query($this->conn, "SELECT * FROM hp");
     }
 
-    // method OOP: menambah hp
-    function tambah($nama, $stok) {
+    // method untuk menambahkan hp
+    public function tambah() {
+        $nama = $this->getNama();
+        $stok = $this->getStok();
         return mysqli_query($this->conn, "INSERT INTO hp (nama, stok) VALUES ('$nama', $stok)");
     }
 
-    // method OOP: mengambil 1 hp berdasarkan id
-    function getById($id) {
+    public function getById($id) {
         $result = mysqli_query($this->conn, "SELECT * FROM hp WHERE id = $id");
         return mysqli_fetch_assoc($result);
     }
 
-    // method OOP: mengupdate data hp
-    function update($id, $nama, $stok) {
+    // method untuk mengupdate hp
+    public function update() {
+        $id = $this->getId();
+        $nama = $this->getNama();
+        $stok = $this->getStok();
         return mysqli_query($this->conn, "UPDATE hp SET nama='$nama', stok=$stok WHERE id=$id");
     }
 
-    // method OOP: menghapus data hp
-    function hapus($id) {
+    // method untuk menghapus hp
+    public function hapus($id) {
         return mysqli_query($this->conn, "DELETE FROM hp WHERE id=$id");
     }
 
-    // method OOP: mengurangi stok dan mencatat penjualan hp
-    function jual($id, $jumlah) {
+    // method untuk menjual hp
+    public function jual($id, $jumlah) {
         mysqli_query($this->conn, "UPDATE hp SET stok = stok - $jumlah WHERE id = $id");
         return mysqli_query($this->conn, "INSERT INTO penjualan (hp_id, jumlah) VALUES ($id, $jumlah)");
     }
 
-    // method OOP: mengambil histori penjualan hp
-    function histori() {
+    // method untuk melihat histori hp yang telah dijual
+    public function histori() {
         return mysqli_query($this->conn, "
             SELECT p.*, h.nama FROM penjualan p
             JOIN hp h ON p.hp_id = h.id
@@ -48,5 +90,4 @@ class HP {
         ");
     }
 }
-
 ?>

@@ -3,6 +3,6 @@ include "koneksi.php";
 include "HP.php";
 
 $hp = new HP($koneksi);
-$hp->hapus($_GET['id']);
+$hp->setId($_GET['id']); $hp->hapus($hp->getId());
 
 header("Location: index.php");

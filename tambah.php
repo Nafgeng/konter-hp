@@ -7,7 +7,7 @@ $hp = new HP($koneksi);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = $_POST['nama'];
     $stok = $_POST['stok'];
-    $hp->tambah($nama, $stok);
+    $hp->setNama($nama); $hp->setStok($stok); $hp->tambah();
     header("Location: index.php");
 }
 ?>

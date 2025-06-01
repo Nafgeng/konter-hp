@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = $_POST['nama'];
     $stok = $_POST['stok'];
     // memperbarui data hp
-    $hp->update($id, $nama, $stok);
+    $hp->setId($id); $hp->setNama($nama); $hp->setStok($stok); $hp->update();
     header("Location: index.php");
 }
 ?>
